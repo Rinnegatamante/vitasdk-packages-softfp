@@ -1,0 +1,24 @@
+name: dispatch
+
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: vitasdk/vitasdk-softfp:latest
+    steps:
+    - name: Get libraries and headers
+      run: |
+        tar -czvf lib.tar.gz /home/user/vitasdk/arm-vita-eabi/lib
+        tar -czvf include.tar.gz /home/user/vitasdk/arm-vita-eabi/include
+    - uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: lib.tar.gz
+        overwrite: true
+        tag: Nightly
+    - uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: include.tar.gz
+        overwrite: true
+        tag: Nightly
